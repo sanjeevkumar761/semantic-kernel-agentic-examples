@@ -1,6 +1,6 @@
 # Agent State Management Example
 
-This project demonstrates how to manage agent state using the Semantic Kernel framework and Azure OpenAI services. The example showcases how to set up an AI-powered conversational agent, simulate interactions, and handle state persistence using a custom `StateHandler` class.
+This project demonstrates how to manage agent state using the Semantic Kernel framework and Azure OpenAI services. The example showcases how to set up an AI-powered conversational agent, simulate interactions, and handle state persistence using Semantic Kernel `ChatHistoryAgentThread` class and a custom `StateHandler` class.
 
 ## Features
 
@@ -57,4 +57,4 @@ This project demonstrates how to manage agent state using the Semantic Kernel fr
 
 ## Example Use Case
 
-This example can be adapted for scenarios where conversational agents need to maintain and update state dynamically, such as customer support bots, virtual assistants, or interactive simulations.
+This example can be adapted for scenarios where AI agents need to maintain and update state dynamically, such as enterprise business processes and workflows.
