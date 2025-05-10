@@ -8,6 +8,7 @@ from azure.core.credentials import AzureKeyCredential
 from azure.ai.inference.aio import ChatCompletionsClient
 from semantic_kernel.connectors.ai.azure_ai_inference import AzureAIInferenceChatCompletion
 from semantic_kernel.agents import ChatCompletionAgent, ChatHistoryAgentThread
+from state_handler import StateHandler  # Import the StateHandler class
 
 # Load environment variables
 load_dotenv()
@@ -18,48 +19,22 @@ api_version = os.getenv("AZURE_OPENAI_API_VERSION")
 utility_deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")
 aoai_api_key = os.getenv("AZURE_OPENAI_API_KEY")
 
-
-class MessageHandler:
-    """Handles message lifecycle: loading, updating, and saving."""
-
-    def __init__(self, file_path: str):
-        self.file_path = file_path
-
-    def load_message(self) -> dict:
-        """Load a message from the JSON file."""
-        with open(self.file_path, "r") as file:
-            return json.load(file)
-
-    def save_message(self, message: dict) -> None:
-        """Save a message to the JSON file."""
-        with open(self.file_path, "w") as file:
-            json.dump(message, file, indent=4)
-        print(f"File '{self.file_path}' updated successfully.")
-
-    def update_message(self, key: str, increment: int) -> dict:
-        """Update the value of a key in the message."""
-        message = self.load_message()
-        message[key] = message.get(key, 0) + increment
-        self.save_message(message)
-        return message
-
-
-async def simulate_interaction(agent: ChatCompletionAgent, thread: ChatHistoryAgentThread, handler: MessageHandler):
+async def simulate_interaction(agent: ChatCompletionAgent, thread: ChatHistoryAgentThread, handler: StateHandler):
     """Simulate an interaction with the agent."""
 
-    # Load the initial message
-    state = handler.load_message()
+    # Load the initial state from the JSON file
+    state = handler.load_state()
 
-    # Send the initial message to the agent
+    # Send the initial state to the agent
     print(f"Setting state for agent: {json.dumps(state)}")
     response = await agent.get_response(messages=json.dumps(state), thread=thread)
     thread = response.thread
     print(f"# {response.name}: {response}")
 
-    # Update the message
-    updated_state = handler.update_message(key="value", increment=1)
+    # Update the state
+    updated_state = handler.update_state(key="value", increment=1)
 
-    # Send the updated message to the agent
+    # Send the updated state to the agent
     response = await agent.get_response(messages=json.dumps(updated_state), thread=thread)
     thread = response.thread
     print(f"# {response.name}: {response}")
@@ -75,7 +50,7 @@ async def simulate_interaction(agent: ChatCompletionAgent, thread: ChatHistoryAg
 async def main():
     """Main function to set up the agent and simulate a conversation."""
     file_path = "./state.json"
-    handler = MessageHandler(file_path)
+    handler = StateHandler(file_path)
 
     # Create the agent
     agent = ChatCompletionAgent(
