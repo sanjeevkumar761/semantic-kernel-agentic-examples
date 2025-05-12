@@ -37,22 +37,25 @@ This project demonstrates how to manage agent state using the Semantic Kernel fr
 
 ## How to Run
 
-1. **Set Up Environment**:
-   - Create a `.env` file with the required Azure OpenAI credentials and configuration.
-
-2. **Install Dependencies**:
+1. **Install Dependencies**:
    - Install the required Python packages:
      ```bash
      pip install -r requirements.txt
      ```
+2. **Change directory**:
+   - cd into agent_framework directory
 
-3. **Run the Script**:
+3. **Set Up Environment**:
+   - Create a `.env` file with the required Azure OpenAI credentials and configuration.
+
+
+4. **Run the Script**:
    - Execute the script using Python:
      ```bash
      python agent_state_management.py
      ```
 
-4. **State File**:
+5. **State File**:
    - Ensure a `state.json` file exists in the project directory for state persistence.
 
 ## Example Use Case
